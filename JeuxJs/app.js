@@ -38,6 +38,21 @@ var FrigoAliment = 0;
 //Savoir si le joueur peut se déplacer
 Dep = true;
 
+//Timer
+var timerText;
+var timer = 300;
+
+//Score
+var ScoreText;
+var Score = 0;
+
+//Slider du frigo
+//Image actuelle
+var image;
+//Vecteur d'image
+var images;
+//Si changement
+var sliderOn = true;
 //Les zones où les interactions sont possible
 const Assietes = new Phaser.Geom.Rectangle(90, 550, 15, 15);
 const Evier = new Phaser.Geom.Rectangle(100, 375, 5, 1);
@@ -49,13 +64,7 @@ const Plats2 = new Phaser.Geom.Rectangle(450, 500, 5, 1);
 const Poele1 = new Phaser.Geom.Rectangle(235, 550, 5, 1);
 const Poele2 = new Phaser.Geom.Rectangle(325, 550, 5, 1);
 
-//Slider du frigo
-//Image actuelle
-var image;
-//Vecteur d'image
-var images;
-//Si changement
-var sliderOn = true;
+
 
 /*-----------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------*/ 
@@ -117,6 +126,17 @@ function preload() {
 /*-----------------------------------------------------------------------------------*/ 
 
 function create() {
+  // Création du texte du timer
+  let Min = Math.floor(timer/60);
+  timerText = this.add.text(30, 30, 'Temps restant : ' + Min  + 'min' + timer%60 +'sec', { font: '15px bold arial', fill: '#000000' });
+  timerText.setDepth(1);
+
+  // Définition de l'événement qui se produit chaque seconde
+  this.time.addEvent({ delay: 1000, callback: onTimerTick, callbackScope: this, loop: true });
+
+  //Score
+  ScoreText = this.add.text(30, 50, 'Score :' + Score, { font: '15px bold arial', fill: '#000000' });
+  ScoreText.setDepth(1);
   //Ajoute le fond
   this.add.image(340, 320, "Fond");
 
@@ -457,6 +477,21 @@ function create() {
 /*-----------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------*/ 
 /*-----------------------------------------------------------------------------------*/ 
+
+function onTimerTick() {
+  // Décrémentation du timer
+  timer--;
+
+  // Mise à jour du texte du timer
+  let Min = Math.floor(timer/60);
+  timerText.setText('Temps restant : ' + Min + 'min' + timer%60 +'sec');
+
+  // Si le timer atteint 0, arrêt du jeu
+  if (timer === 0) {
+      this.scene.pause();
+  }
+  console.log(timer);
+}
 
 function Deplacement() {
   console.log("Cinq secondes se sont écoulées !");
