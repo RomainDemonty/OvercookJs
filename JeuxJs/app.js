@@ -14,22 +14,29 @@ var config = {
     arcade: 
     {
       gravity: { y: 0 },
-      debug: true,
+      debug: false,
     },
   }
 };
 
 var player;
+var Poele;//Afficher les sprites de la poele
+
 var cursors;
 var game = new Phaser.Game(config);
 
-var Etat;
+var Etat;//Savoir le bonhomme est comment
 
 //angle de rotation personnage
 var angle;
 
 //Bordure de la map
 var bounds;
+
+var FrigoAliment = 0;
+
+//Savoir si le joueur peut se déplacer
+Dep = true;
 
 //Les zones où les interactions sont possible
 const Assietes = new Phaser.Geom.Rectangle(90, 550, 15, 15);
@@ -42,6 +49,13 @@ const Plats2 = new Phaser.Geom.Rectangle(450, 500, 5, 1);
 const Poele1 = new Phaser.Geom.Rectangle(235, 550, 5, 1);
 const Poele2 = new Phaser.Geom.Rectangle(325, 550, 5, 1);
 
+//Slider du frigo
+//Image actuelle
+var image;
+//Vecteur d'image
+var images;
+//Si changement
+var sliderOn = true;
 
 /*-----------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------*/ 
@@ -49,10 +63,51 @@ const Poele2 = new Phaser.Geom.Rectangle(325, 550, 5, 1);
 
 function preload() {
   this.load.image("Fond", "./Image/Cuisine2.jpg");
-  //this.load.image("ground", "");
+
+  this.load.image("FlecheDroite", "./Image/FlecheDroite.png");
+  this.load.image("FlecheGauche", "./Image/FlecheGauche.png");
+
+  this.load.image("Steak", "./Image/Steak.png");
+  this.load.image("Poulet", "./Image/Poulet.png");
+  this.load.image("Oeuf", "./Image/Oeuf.png");
+  this.load.image("Salade", "./Image/Salade.png");
+  this.load.image("Pain", "./Image/Pain.png");
+
+  this.load.image("AssietteVide", "./Image/AssietteVide.png");
+
+  this.load.image("AssietteOeufCru", "./Image/AssietteOeufCru.png");
+  this.load.image("AssietteOeufCuit", "./Image/AssietteOeufCuit.png");
+  this.load.image("AssietteOeufCrame", "./Image/AssietteOeufCrame.png");
+
+  this.load.image("AssiettePain", "./Image/AssiettePain.png");
+  
+  this.load.image("AssiettePainSteakCru", "./Image/AssiettePainSteakCru.png");
+  this.load.image("BurgerCru", "./Image/BurgerCru.png");
+
+  this.load.image("AssiettePainSteakCuit", "./Image/AssiettePainSteakCuit.png");
+  this.load.image("BurgerCuit", "./Image/BurgerCuit.png");
+
+  this.load.image("AssiettePainSteakCrame", "./Image/AssiettePainSteakCrame.png");
+  this.load.image("BurgerCrame", "./Image/BurgerCrame.png");
+
+  this.load.image("AssiettePouletCru", "./Image/AssiettePouletCru.png");
+  this.load.image("AssiettePouletCruSalade", "./Image/AssiettePouletCruSalade.png");
+
+  this.load.image("AssiettePouletCuit", "./Image/AssiettePouletCuit.png");
+  this.load.image("AssiettePouletCuitSalade", "./Image/AssiettePouletCuitSalade.png");
+
+  this.load.image("AssiettePouletCrame", "./Image/AssiettePouletCrame.png");
+  this.load.image("AssiettePouletCrameSalade", "./Image/AssiettePouletCrameSalade.png");
+
+  this.load.spritesheet("Poele", "./Image/ImagePoeleAssiettes1.png", 
+  {
+    frameWidth: 80, //Taille de l'image 
+    frameHeight: 80,
+  });
+
   this.load.spritesheet("mec", "./Image/SpriteBonhomme.png", 
   {
-    frameWidth: 96, //Taille de l'image
+    frameWidth: 96, //Taille de l'image 
     frameHeight: 96,
   });
 }
@@ -64,6 +119,58 @@ function preload() {
 function create() {
   //Ajoute le fond
   this.add.image(340, 320, "Fond");
+
+  //Recette Burger
+  this.add.image(490, 90, "Pain");
+  this.add.image(490, 155, "Steak");
+  this.add.image(490, 225, "Salade");
+  this.add.image(485, 285, "BurgerCuit");
+
+  //Recette Oeuf
+  this.add.image(565, 90, "Oeuf");
+  this.add.image(560, 155, "AssietteOeufCuit");
+
+  //Recette Poulet Salade
+  this.add.image(640, 90, "Poulet");
+  this.add.image(640, 155, "Salade");
+  this.add.image(635, 215, "AssiettePouletCuitSalade");
+
+  //Slider //
+  var FlecheDroite = this.add.image(380, 50, "FlecheDroite");
+  FlecheDroite.setInteractive();
+  FlecheDroite.on('pointerdown', function () 
+  {
+    console.log("L'utilisateur a cliqué sur FlecheDroite !");
+    if(FrigoAliment == 4)
+    {
+      FrigoAliment = 0;
+    }
+    else
+    {
+      FrigoAliment++;
+    }
+
+    console.log(FrigoAliment);
+    sliderOn = true;
+  });
+  
+  var FlecheGauche = this.add.image(275, 50, "FlecheGauche");
+  FlecheGauche.setInteractive();
+  FlecheGauche.on('pointerdown', function () 
+  {
+    console.log("L'utilisateur a cliqué sur FlecheGauche !");
+    if(FrigoAliment == 0)
+    {
+      FrigoAliment = 4;
+    }
+    else
+    {
+      FrigoAliment--;
+    }
+
+    console.log(FrigoAliment);
+    sliderOn = true;
+  });
 
   //Ajoute le mec au millieu
   player = this.physics.add.sprite(290, 320, "mec");
@@ -79,6 +186,13 @@ function create() {
 
   //var spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
   //Les différentes annimations
+  let anim = this.anims.create({
+    key: 'LavagePoele',
+    frames: this.anims.generateFrameNumbers('Poele', { start: 10, end: 20 }),
+    frameRate: 2,
+    repeat: 0
+  });
+
   this.anims.create({
     key: "Vide",
     frames: [{ key: "mec", frame: 0 }],
@@ -318,11 +432,12 @@ function create() {
   Etat = 0;
 
   // Créer un objet Graphics
-  const graphics = this.add.graphics();
+  //const graphics = this.add.graphics();
   // Définir la couleur de remplissage à rouge
-  graphics.fillStyle(0xff0000);
+  //graphics.fillStyle(0xff0000);
   // Dessiner un rectangle rempli de couleur dans la zone atteignable
   
+  /*
   graphics.fillRectShape(Assietes);
   graphics.fillRectShape(Evier);
   graphics.fillRectShape(Couteau);
@@ -332,33 +447,49 @@ function create() {
   graphics.fillRectShape(Poele2);
   graphics.fillRectShape(Plats1);
   graphics.fillRectShape(Plats2);
-  
+  */
+
   //graphics.fillRectShape(player);
+  images = ['Steak','Poulet','Oeuf','Pain','Salade'];
+  image = this.add.image(330, 50, images[FrigoAliment]);
 }
 
 /*-----------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------*/ 
 /*-----------------------------------------------------------------------------------*/ 
 
+function Deplacement() {
+  console.log("Cinq secondes se sont écoulées !");
+  Dep = true;
+  Poele.destroy();
+  player.anims.play("PoeleVide", true);
+  Etat = 7;
+}
+
 function update() {
+
+  if(sliderOn == true)
+  {
+    image.destroy();
+    image = this.add.sprite(330, 50, images[FrigoAliment]);
+    sliderOn = false;
+  }
+
   //Calcul des zones
   if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), Evier)) 
   {
-    //if(cursors.space.isDown && Etat == 17)
-    //{
-        player.anims.play("PoeleVide", true);
-        Etat = 5;
-    //}
-  }
-  else
-  {
-    player.anims.play("Vide", true);
-    Etat = 1;
-  }
+    if(cursors.space.isDown && Etat == 17)
+    {
+        Poele = this.physics.add.sprite(60, 360, "Poele");
+        Poele.anims.play("LavagePoele", true);
 
-  if(Etat != 5)
-  {
-
+        player.anims.play("Vide", true);
+        Etat = 0;
+        Dep = false;
+        player.setVelocityX(0);
+        player.setVelocityY(0);
+        setTimeout(Deplacement, 5000);
+    }
   }
   else 
   {
@@ -391,7 +522,6 @@ function update() {
             else{
               player.anims.play("Vide", true);
               Etat = 0;
-              player.anims.play("Vidzade", true);
             }
           }
         } 
@@ -399,11 +529,71 @@ function update() {
         {
           if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Frigo)) 
           {
-            if(cursors.space.isDown && Etat == 0)
+            if(cursors.space.isDown && ((Etat >= 0 ||Etat <= 6) && Etat != 4 ))
             {
-              player.anims.play("Steack", true);
-              Etat = 5;
-            }  
+              switch (FrigoAliment) {
+                case 0:
+                    if(Etat == 5)
+                    {
+                      player.anims.play("Vide", true);
+                      Etat = 0;
+                    }
+                    else
+                    {
+                      player.anims.play("Steack", true);
+                      Etat = 5;
+                    }
+                    break;
+                case 1:
+                    if(Etat == 1)
+                    {
+                      player.anims.play("Vide", true);
+                      Etat = 0;
+                    }
+                    else
+                    {
+                      player.anims.play("Poulet", true);
+                      Etat = 1;
+                    }
+                    break;
+                case 2:
+                    if(Etat == 2)
+                    {
+                      player.anims.play("Vide", true);
+                      Etat = 0;
+                    }
+                    else
+                    {
+                      player.anims.play("Oeuf", true);
+                      Etat = 2;
+                    }
+                    break;
+                case 3:
+                    if(Etat == 6)
+                    {
+                      player.anims.play("Vide", true);
+                      Etat = 0;
+                    }
+                    else
+                    {
+                      player.anims.play("Pain", true);
+                      Etat = 6;
+                    }
+                    break;
+                case 4:
+                    if(Etat == 3)
+                    {
+                      player.anims.play("Vide", true);
+                      Etat = 0;
+                    }
+                    else
+                    {
+                      player.anims.play("Salade", true);
+                      Etat = 3;
+                    }
+                    break;
+              }
+            }
           } 
           else 
           {
@@ -442,90 +632,95 @@ function update() {
     }
   }
 
-  //Deplacement
-  if (cursors.left.isDown && cursors.up.isDown) 
+  if(Dep == true)
   {
-    //left-up
-    player.setVelocityX(-160);
-    player.setVelocityY(-160);
-    angle = 225;
-    player.rotation = (angle * Math.PI) / 180;
-  } 
-  else 
-  {
-    if (cursors.right.isDown && cursors.up.isDown) 
+    if (cursors.left.isDown && cursors.up.isDown) 
     {
-      //Right-up
-      player.setVelocityX(160);
+      //left-up
+      player.setVelocityX(-160);
       player.setVelocityY(-160);
-      angle = 315;
+      angle = 225;
       player.rotation = (angle * Math.PI) / 180;
     } 
     else 
     {
-      if (cursors.left.isDown && cursors.down.isDown) 
+      if (cursors.right.isDown && cursors.up.isDown) 
       {
-        //Left-down
-        player.setVelocityX(-160);
-        player.setVelocityY(160);
-        angle = 135;
+        //Right-up
+        player.setVelocityX(160);
+        player.setVelocityY(-160);
+        angle = 315;
         player.rotation = (angle * Math.PI) / 180;
       } 
       else 
       {
-        if (cursors.right.isDown && cursors.down.isDown) 
+        if (cursors.left.isDown && cursors.down.isDown) 
         {
-          //Right-down
-          player.setVelocityX(160);
+          //Left-down
+          player.setVelocityX(-160);
           player.setVelocityY(160);
-          angle = 45;
+          angle = 135;
           player.rotation = (angle * Math.PI) / 180;
-        }
+        } 
         else 
         {
-          //Position des X
-          if (cursors.left.isDown) 
+          if (cursors.right.isDown && cursors.down.isDown) 
           {
-            player.setVelocityX(-160);
-            angle = 180;
+            //Right-down
+            player.setVelocityX(160);
+            player.setVelocityY(160);
+            angle = 45;
             player.rotation = (angle * Math.PI) / 180;
-          } 
-          else 
-          {
-            if (cursors.right.isDown) 
-            {
-              player.setVelocityX(160);
-              angle = 0;
-              player.rotation = (angle * Math.PI) / 180;
-            } 
-            else 
-            {
-              player.setVelocityX(0);
-            }
           }
-
-          //Position des Y
-          if (cursors.up.isDown) 
-          {
-            player.setVelocityY(-160);
-            angle = 270;
-            player.rotation = (angle * Math.PI) / 180;
-          } 
           else 
           {
-            if (cursors.down.isDown) 
+            //Position des X
+            if (cursors.left.isDown) 
             {
-              player.setVelocityY(160);
-              angle = 90;
+              player.setVelocityX(-160);
+              angle = 180;
               player.rotation = (angle * Math.PI) / 180;
             } 
             else 
             {
-              player.setVelocityY(0);
+              if (cursors.right.isDown) 
+              {
+                player.setVelocityX(160);
+                angle = 0;
+                player.rotation = (angle * Math.PI) / 180;
+              } 
+              else 
+              {
+                player.setVelocityX(0);
+              }
+            }
+
+            //Position des Y
+            if (cursors.up.isDown) 
+            {
+              player.setVelocityY(-160);
+              angle = 270;
+              player.rotation = (angle * Math.PI) / 180;
+            } 
+            else 
+            {
+              if (cursors.down.isDown) 
+              {
+                player.setVelocityY(160);
+                angle = 90;
+                player.rotation = (angle * Math.PI) / 180;
+              } 
+              else 
+              {
+                player.setVelocityY(0);
+              }
             }
           }
         }
       }
     }
   }
+
+  //Deplacement
+
 }
