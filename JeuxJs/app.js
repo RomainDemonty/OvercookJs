@@ -22,7 +22,9 @@ var config = {
 var player;
 var Poele;//Afficher les sprites de la poele
 var Cuiss1;//Poele de cuisson 1
-var Cuiss2;//Poele de cuisson 2
+
+//L'état de Cuiss1
+C1 = 0;
 
 var cursors;
 var game = new Phaser.Game(config);
@@ -65,9 +67,7 @@ const Evier = new Phaser.Geom.Rectangle(100, 375, 5, 1);
 const Poubelle = new Phaser.Geom.Rectangle(100, 290, 5, 1);
 const Frigo = new Phaser.Geom.Rectangle(290, 100, 70, 20);
 const Plats1 = new Phaser.Geom.Rectangle(450, 350, 5, 1);
-const Plats2 = new Phaser.Geom.Rectangle(450, 500, 5, 1);
 const Poele1 = new Phaser.Geom.Rectangle(235, 550, 5, 1);
-const Poele2 = new Phaser.Geom.Rectangle(325, 550, 5, 1);
 /*-----------------------------------------------------------------------------------*/
 
 
@@ -209,7 +209,6 @@ function create() {
 
   //Ajout des poeles
   Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-  Cuiss2 = this.physics.add.sprite(315, 575, "PoeleCuiss");
 
   player.setOrigin(0.39, 0.5);
   player.setSize(61, 61);
@@ -239,62 +238,68 @@ function create() {
   /*-----------------------------------------------------------------------------------*/
   /*-----------------------------------------------------------------------------------*/
   this.anims.create({
-    key: "PoeleVideCuiss",
+    key: "PoeleVideCuissA",
     frames: [{ key: "PoeleCuiss", frame: 0 }],
     frameRate: 1,
   });
 
   this.anims.create({
-    key: "PoeleOeufCru",
+    key: "PoeleOeufCruA",
     frames: [{ key: "PoeleCuiss", frame: 1 }],
     frameRate: 1,
   });
 
   this.anims.create({
-    key: "PoeleOeufCuit",
+    key: "PoeleOeufCuitA",
     frames: [{ key: "PoeleCuiss", frame: 2 }],
     frameRate: 1,
   });
 
   this.anims.create({
-    key: "PoeleOeufCramé",
+    key: "PoeleOeufCraméA",
     frames: [{ key: "PoeleCuiss", frame: 3 }],
     frameRate: 1,
   });
 
   this.anims.create({
-    key: "PoeleSteackCru",
+    key: "PoeleSteackCruA",
     frames: [{ key: "PoeleCuiss", frame: 4 }],
     frameRate: 1,
   });
 
   this.anims.create({
-    key: "PoeleSteackCuit",
+    key: "PoeleSteackCuitA",
     frames: [{ key: "PoeleCuiss", frame: 5 }],
     frameRate: 1,
   });
 
   this.anims.create({
-    key: "PoeleSteackCrame",
+    key: "PoeleSteackCrameA",
     frames: [{ key: "PoeleCuiss", frame: 6 }],
     frameRate: 1,
   });
 
   this.anims.create({
-    key: "PoelePouletCru",
+    key: "PoelePouletCruA",
     frames: [{ key: "PoeleCuiss", frame: 7 }],
     frameRate: 1,
   });
 
   this.anims.create({
-    key: "PoelePouletCuit",
+    key: "PoelePouletCuitA",
     frames: [{ key: "PoeleCuiss", frame: 8 }],
     frameRate: 1,
   });
 
   this.anims.create({
-    key: "PoelePouletCrame",
+    key: "PoelePouletCrameA",
     frames: [{ key: "PoeleCuiss", frame: 9 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoeleSalA",
+    frames: [{ key: "PoeleCuiss", frame: 10 }],
     frameRate: 1,
   });
   /*-----------------------------------------------------------------------------------*/
@@ -553,9 +558,7 @@ function create() {
   graphics.fillRectShape(Poubelle);
   graphics.fillRectShape(Frigo);
   graphics.fillRectShape(Poele1);
-  graphics.fillRectShape(Poele2);
   graphics.fillRectShape(Plats1);
-  graphics.fillRectShape(Plats2);
   
 
   //graphics.fillRectShape(player);
@@ -738,111 +741,220 @@ function update() {
               } 
               else 
               {
-                if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Plats2)) 
+                if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poele1)) 
                 {
-                  //player.anims.play("AssietePouletCuit", true);
-                } 
-                else
-                {
-                  if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poele1)) 
+                  //prendre mettre la poele
+                  if(cursors.space.isDown)
                   {
-                    if(cursors.space.isDown)
-                    {
-                      switch(Etat){
-                        //Mec Vide
-                        case 0:
-                          player.anims.play("PoeleVide", true);
-                          Etat = 7;
-                          Cuiss1.destroy();
-                          curDown = false;
-                          setTimeout(cursor, 500);
-                        break;
-                        //Vide
-                        case 7:
-                          player.anims.play("Vide", true);
-                          Etat = 0;
-                          Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                          curDown = false;
-                          setTimeout(cursor, 500);
-                        break;
-                        //Poulet
-                        case 8:
-                          player.anims.play("Vide", true);
-                          Etat = 0;
-                          Cuiss1 = this.physics.add.sprite(235, 575, "PoelePouletCru");
-                          curDown = false;
-                          setTimeout(cursor, 500);
-                        break;
-                        case 9:
-                        
-                        break;
-                        case 10:
-                        
-                        break;
-                        //Oeuf
-                        case 11:
-                        
-                        break;
-                        case 12:
-                        
-                        break;
-                        case 13:
-                        
-                        break;
-                        //Steak
-                        case 14:
-                        
-                        break;
-                        case 15:
-                        
-                        break;
-                        case 16:
-                        
-                        break;
-                        //Sale
-                        case 17:
-                        
-                        break;
-                      }
-                    }
-                    else
-                    {
-                      if(cursors.enter.isDown)
-                      {
-
-                      }
-                    }
-                  } 
-                  else 
-                  {
-                    if (Etat == 0 && Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poele2) && cursors.space.isDown) 
-                    {
-                      player.anims.play("PoeleVide", true);
-                      Etat = 7;
-                      Cuiss2.destroy();
-                      curDown = false;
-                      setTimeout(cursor, 500);
-                    } 
-                    else
-                    {
-                      if(Etat == 7 && cursors.space.isDown)
-                      {
+                    switch(Etat){
+                      //Mec Vide
+                      case 0:
+                        switch(C1){
+                          case 0:
+                            player.anims.play("PoeleVide", true);
+                            Etat = 7;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 1:
+                            player.anims.play("PoeleOeufcru", true);
+                            Etat =11;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 2:
+                            player.anims.play("PoeleOeufcuit", true);
+                            Etat = 12;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 3:
+                            player.anims.play("PoeleOeufCrame", true);
+                            Etat = 13;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 4:
+                            player.anims.play("PoeleSteackCru", true);
+                            Etat = 14;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 5:
+                            player.anims.play("PoeleSteackCuit", true);
+                            Etat = 15;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 6:
+                            player.anims.play("PoeleSteackCrame", true);
+                            Etat = 16;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 7:
+                            player.anims.play("PoelePouletCru", true);
+                            Etat = 8;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 8:
+                            player.anims.play("PoelePouletCuit", true);
+                            Etat = 9;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 9:
+                            player.anims.play("PoelePouletCrame", true);
+                            Etat = 10;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                          case 10:
+                            player.anims.play("PoeleSale", true);
+                            Etat = 17;
+                            Cuiss1.destroy();
+                            curDown = false;
+                            setTimeout(cursor, 500);
+                          break;
+                        }
+                      break;
+                      case 1:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss2 = this.physics.add.sprite(315, 575, "PoeleCuiss");
-                        Cuiss2.anims.play("PoeleOeufCru", true);
+                        Cuiss1.anims.play("PoelePouletCruA", true);
                         curDown = false;
                         setTimeout(cursor, 500);
-                      }
+                        C1 = 7;
+                      break;
+                      case 2:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1.anims.play("PoeleOeufCruA", true);
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 1;
+                      break;
+                      case 5:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1.anims.play("PoeleSteackCruA", true);
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 4;
+                      break;
+                      //Vide
+                      case 7:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleVideCuissA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 0;
+                      break;
+                      //Poulet
+                      case 8:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoelePouletCruA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 7;
+                      break;
+                      case 9:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoelePouletCuitA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 8;
+                      break;
+                      case 10:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoelePouletCrameA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 9;
+                      break;
+                      //Oeuf
+                      case 11:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleOeufCruA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 1;
+                      break;
+                      case 12:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleOeufCuitA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 2;
+                      break;
+                      case 13:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleOeufCraméA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 3;
+                      break;
+                      //Steak
+                      case 14:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleSteackCruA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 4;
+                      break;
+                      case 15:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleSteackCuitA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 5;
+                      break;
+                      case 16:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleSteackCrameA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 6;
+                      break;
+                      //Sale
+                      case 17:
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleSalA");
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                        C1 = 10;
+                      break;
                     }
                   }
-                }
+                } 
               }
             }
           }
         }
+      }
     }
-  }
 
 
   //-----------------deplacement du joueur avec les rotatins--------------------------//
@@ -934,5 +1046,6 @@ function update() {
       }
     }
   }
-  //------------------------------------------------------------------------//
+//------------------------------------------------------------------------//
+  
 }
