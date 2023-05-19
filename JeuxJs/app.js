@@ -14,13 +14,15 @@ var config = {
     arcade: 
     {
       gravity: { y: 0 },
-      debug: false,
+      debug: true,
     },
   }
 };
 
 var player;
 var Poele;//Afficher les sprites de la poele
+var Cuiss1;//Poele de cuisson 1
+var Cuiss2;//Poele de cuisson 2
 
 var cursors;
 var game = new Phaser.Game(config);
@@ -46,6 +48,9 @@ var timer = 300;
 var ScoreText;
 var Score = 0;
 
+//Si je maintient la touche appuyée éviter que l'évenement se fasse en boucle       
+var curDown = true;
+
 //Slider du frigo
 //Image actuelle
 var image;
@@ -53,17 +58,17 @@ var image;
 var images;
 //Si changement
 var sliderOn = true;
-//Les zones où les interactions sont possible
+
+//----------Les zones où les interactions sont possible-------------------------------//
 const Assietes = new Phaser.Geom.Rectangle(90, 550, 15, 15);
 const Evier = new Phaser.Geom.Rectangle(100, 375, 5, 1);
-const Couteau = new Phaser.Geom.Rectangle(100, 175, 20, 20);
 const Poubelle = new Phaser.Geom.Rectangle(100, 290, 5, 1);
 const Frigo = new Phaser.Geom.Rectangle(290, 100, 70, 20);
 const Plats1 = new Phaser.Geom.Rectangle(450, 350, 5, 1);
 const Plats2 = new Phaser.Geom.Rectangle(450, 500, 5, 1);
 const Poele1 = new Phaser.Geom.Rectangle(235, 550, 5, 1);
 const Poele2 = new Phaser.Geom.Rectangle(325, 550, 5, 1);
-
+/*-----------------------------------------------------------------------------------*/
 
 
 /*-----------------------------------------------------------------------------------*/
@@ -109,6 +114,13 @@ function preload() {
   this.load.image("AssiettePouletCrameSalade", "./Image/AssiettePouletCrameSalade.png");
 
   this.load.spritesheet("Poele", "./Image/ImagePoeleAssiettes1.png", 
+  {
+    frameWidth: 80, //Taille de l'image 
+    frameHeight: 80,
+  });
+
+  
+  this.load.spritesheet("PoeleCuiss", "./Image/ImagePoeleAssiettes1.png", 
   {
     frameWidth: 80, //Taille de l'image 
     frameHeight: 80,
@@ -194,8 +206,11 @@ function create() {
 
   //Ajoute le mec au millieu
   player = this.physics.add.sprite(290, 320, "mec");
- 
-  
+
+  //Ajout des poeles
+  Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+  Cuiss2 = this.physics.add.sprite(315, 575, "PoeleCuiss");
+
   player.setOrigin(0.39, 0.5);
   player.setSize(61, 61);
   var radius = 31;
@@ -206,12 +221,87 @@ function create() {
 
   //var spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
   //Les différentes annimations
+  /*------------------------------Lavage-----------------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
   let anim = this.anims.create({
     key: 'LavagePoele',
     frames: this.anims.generateFrameNumbers('Poele', { start: 10, end: 20 }),
     frameRate: 2,
     repeat: 0
   });
+  /*-----------------------------------------------------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
+
+
+  /*----------------------Frame de la poele de cuisson---------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
+  this.anims.create({
+    key: "PoeleVideCuiss",
+    frames: [{ key: "PoeleCuiss", frame: 0 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoeleOeufCru",
+    frames: [{ key: "PoeleCuiss", frame: 1 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoeleOeufCuit",
+    frames: [{ key: "PoeleCuiss", frame: 2 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoeleOeufCramé",
+    frames: [{ key: "PoeleCuiss", frame: 3 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoeleSteackCru",
+    frames: [{ key: "PoeleCuiss", frame: 4 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoeleSteackCuit",
+    frames: [{ key: "PoeleCuiss", frame: 5 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoeleSteackCrame",
+    frames: [{ key: "PoeleCuiss", frame: 6 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoelePouletCru",
+    frames: [{ key: "PoeleCuiss", frame: 7 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoelePouletCuit",
+    frames: [{ key: "PoeleCuiss", frame: 8 }],
+    frameRate: 1,
+  });
+
+  this.anims.create({
+    key: "PoelePouletCrame",
+    frames: [{ key: "PoeleCuiss", frame: 9 }],
+    frameRate: 1,
+  });
+  /*-----------------------------------------------------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
+  
 
   this.anims.create({
     key: "Vide",
@@ -451,23 +541,22 @@ function create() {
   //Définir l'état de base
   Etat = 0;
 
-  // Créer un objet Graphics
-  //const graphics = this.add.graphics();
-  // Définir la couleur de remplissage à rouge
-  //graphics.fillStyle(0xff0000);
+  //Créer un objet Graphics
+  const graphics = this.add.graphics();
+   //Définir la couleur de remplissage à rouge
+  graphics.fillStyle(0xff0000);
   // Dessiner un rectangle rempli de couleur dans la zone atteignable
   
-  /*
+  
   graphics.fillRectShape(Assietes);
   graphics.fillRectShape(Evier);
-  graphics.fillRectShape(Couteau);
   graphics.fillRectShape(Poubelle);
   graphics.fillRectShape(Frigo);
   graphics.fillRectShape(Poele1);
   graphics.fillRectShape(Poele2);
   graphics.fillRectShape(Plats1);
   graphics.fillRectShape(Plats2);
-  */
+  
 
   //graphics.fillRectShape(player);
   images = ['Steak','Poulet','Oeuf','Pain','Salade'];
@@ -478,6 +567,7 @@ function create() {
 /*-----------------------------------------------------------------------------------*/ 
 /*-----------------------------------------------------------------------------------*/ 
 
+/*-------------Timer de 5 minutes pour le temps de jeux---------------------------------*/
 function onTimerTick() {
   // Décrémentation du timer
   timer--;
@@ -492,7 +582,9 @@ function onTimerTick() {
   }
   console.log(timer);
 }
+/*-------------------------------------------------------------------------------------*/
 
+/*-------------Permet de pas bouger quand on netoie la poele----------------------------*/
 function Deplacement() {
   console.log("Cinq secondes se sont écoulées !");
   Dep = true;
@@ -500,6 +592,14 @@ function Deplacement() {
   player.anims.play("PoeleVide", true);
   Etat = 7;
 }
+/*-------------------------------------------------------------------------------------*/
+
+/*Permet de pas avoir 20 événements quand on reste trop longtepms sur la touche appuyer*/
+function cursor() {
+  console.log("une seconde c'est écoulées !");
+  curDown = true;
+}
+/*-------------------------------------------------------------------------------------*/
 
 function update() {
 
@@ -511,162 +611,241 @@ function update() {
   }
 
   //Calcul des zones
-  if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), Evier)) 
+  if(curDown == true)
   {
-    if(cursors.space.isDown && Etat == 17)
+    if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), Evier)) 
     {
-        Poele = this.physics.add.sprite(60, 360, "Poele");
-        Poele.anims.play("LavagePoele", true);
-
-        player.anims.play("Vide", true);
-        Etat = 0;
-        Dep = false;
-        player.setVelocityX(0);
-        player.setVelocityY(0);
-        setTimeout(Deplacement, 5000);
-    }
-  }
-  else 
-  {
-    if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), Assietes)) 
-    {
-      if(cursors.space.isDown && Etat == 0)
+      if(cursors.space.isDown && Etat == 17)
       {
-        player.anims.play("AssieteVide", true);
-        Etat = 21;
+          Poele = this.physics.add.sprite(60, 360, "Poele");
+          Poele.anims.play("LavagePoele", true);
+          angle = 270;
+          Poele.rotation = (angle * Math.PI) / 180;
+
+          player.anims.play("Vide", true);
+          Etat = 0;
+          Dep = false;
+          player.setVelocityX(0);
+          player.setVelocityY(0);
+          setTimeout(Deplacement, 5000);
       }
-    } 
+    }
     else 
     {
-      if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), Couteau)) 
+      if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), Assietes)) 
       {
-        //player.anims.play("Salade", true);
+        if(cursors.space.isDown && Etat == 0)
+        {
+          player.anims.play("AssieteVide", true);
+          Etat = 21;
+        }
       } 
       else 
       {
-        if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poubelle)) 
-        {
-          if(cursors.space.isDown && Etat != 0)
+          if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poubelle)) 
           {
-            //console.log(Etat)
-            if(Etat > 7 && Etat < 18)
+            if(cursors.space.isDown && Etat != 0)
             {
-              player.anims.play("PoeleSale", true);
-              Etat = 17;
-            }
-            else{
-              player.anims.play("Vide", true);
-              Etat = 0;
-            }
-          }
-        } 
-        else 
-        {
-          if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Frigo)) 
-          {
-            if(cursors.space.isDown && ((Etat >= 0 ||Etat <= 6) && Etat != 4 ))
-            {
-              switch (FrigoAliment) {
-                case 0:
-                    if(Etat == 5)
-                    {
-                      player.anims.play("Vide", true);
-                      Etat = 0;
-                    }
-                    else
-                    {
-                      player.anims.play("Steack", true);
-                      Etat = 5;
-                    }
-                    break;
-                case 1:
-                    if(Etat == 1)
-                    {
-                      player.anims.play("Vide", true);
-                      Etat = 0;
-                    }
-                    else
-                    {
-                      player.anims.play("Poulet", true);
-                      Etat = 1;
-                    }
-                    break;
-                case 2:
-                    if(Etat == 2)
-                    {
-                      player.anims.play("Vide", true);
-                      Etat = 0;
-                    }
-                    else
-                    {
-                      player.anims.play("Oeuf", true);
-                      Etat = 2;
-                    }
-                    break;
-                case 3:
-                    if(Etat == 6)
-                    {
-                      player.anims.play("Vide", true);
-                      Etat = 0;
-                    }
-                    else
-                    {
-                      player.anims.play("Pain", true);
-                      Etat = 6;
-                    }
-                    break;
-                case 4:
-                    if(Etat == 3)
-                    {
-                      player.anims.play("Vide", true);
-                      Etat = 0;
-                    }
-                    else
-                    {
-                      player.anims.play("Salade", true);
-                      Etat = 3;
-                    }
-                    break;
+              //console.log(Etat)
+              if(Etat > 7 && Etat < 18)
+              {
+                player.anims.play("PoeleSale", true);
+                Etat = 17;
+              }
+              else{
+                player.anims.play("Vide", true);
+                Etat = 0;
               }
             }
           } 
           else 
           {
-            if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Plats1)) 
+            if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Frigo)) 
             {
-              //player.anims.play("AssietePouletCuit", true);
+              if(cursors.space.isDown && ((Etat >= 0 ||Etat <= 6) && Etat != 4 ))
+              {
+                switch (FrigoAliment) {
+                  case 0:
+                      if(Etat == 5)
+                      {
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                      }
+                      else
+                      {
+                        player.anims.play("Steack", true);
+                        Etat = 5;
+                      }
+                      break;
+                  case 1:
+                      if(Etat == 1)
+                      {
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                      }
+                      else
+                      {
+                        player.anims.play("Poulet", true);
+                        Etat = 1;
+                      }
+                      break;
+                  case 2:
+                      if(Etat == 2)
+                      {
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                      }
+                      else
+                      {
+                        player.anims.play("Oeuf", true);
+                        Etat = 2;
+                      }
+                      break;
+                  case 3:
+                      if(Etat == 6)
+                      {
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                      }
+                      else
+                      {
+                        player.anims.play("Pain", true);
+                        Etat = 6;
+                      }
+                      break;
+                  case 4:
+                      if(Etat == 3)
+                      {
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                      }
+                      else
+                      {
+                        player.anims.play("Salade", true);
+                        Etat = 3;
+                      }
+                      break;
+                }
+                curDown = false;
+                setTimeout(cursor, 500);
+              }
             } 
             else 
             {
-              if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Plats2)) 
+              if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Plats1)) 
               {
                 //player.anims.play("AssietePouletCuit", true);
               } 
-              else
+              else 
               {
-                if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poele1)) 
+                if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Plats2)) 
                 {
-                  if(cursors.space.isDown )//Pas juste
-                  {
-                      player.anims.play("PoeleSteackCru", true);
-                      Etat = 14;
-                  }
+                  //player.anims.play("AssietePouletCuit", true);
                 } 
-                else 
+                else
                 {
-                  if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poele2)) 
+                  if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poele1)) 
                   {
-                    //player.anims.play("PoeleSteakCrame", true);
+                    if(cursors.space.isDown)
+                    {
+                      switch(Etat){
+                        //Mec Vide
+                        case 0:
+                          player.anims.play("PoeleVide", true);
+                          Etat = 7;
+                          Cuiss1.destroy();
+                          curDown = false;
+                          setTimeout(cursor, 500);
+                        break;
+                        //Vide
+                        case 7:
+                          player.anims.play("Vide", true);
+                          Etat = 0;
+                          Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                          curDown = false;
+                          setTimeout(cursor, 500);
+                        break;
+                        //Poulet
+                        case 8:
+                          player.anims.play("Vide", true);
+                          Etat = 0;
+                          Cuiss1 = this.physics.add.sprite(235, 575, "PoelePouletCru");
+                          curDown = false;
+                          setTimeout(cursor, 500);
+                        break;
+                        case 9:
+                        
+                        break;
+                        case 10:
+                        
+                        break;
+                        //Oeuf
+                        case 11:
+                        
+                        break;
+                        case 12:
+                        
+                        break;
+                        case 13:
+                        
+                        break;
+                        //Steak
+                        case 14:
+                        
+                        break;
+                        case 15:
+                        
+                        break;
+                        case 16:
+                        
+                        break;
+                        //Sale
+                        case 17:
+                        
+                        break;
+                      }
+                    }
+                    else
+                    {
+                      if(cursors.enter.isDown)
+                      {
+
+                      }
+                    }
                   } 
+                  else 
+                  {
+                    if (Etat == 0 && Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poele2) && cursors.space.isDown) 
+                    {
+                      player.anims.play("PoeleVide", true);
+                      Etat = 7;
+                      Cuiss2.destroy();
+                      curDown = false;
+                      setTimeout(cursor, 500);
+                    } 
+                    else
+                    {
+                      if(Etat == 7 && cursors.space.isDown)
+                      {
+                        player.anims.play("Vide", true);
+                        Etat = 0;
+                        Cuiss2 = this.physics.add.sprite(315, 575, "PoeleCuiss");
+                        Cuiss2.anims.play("PoeleOeufCru", true);
+                        curDown = false;
+                        setTimeout(cursor, 500);
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         }
-      }
     }
   }
 
+
+  //-----------------deplacement du joueur avec les rotatins--------------------------//
   if(Dep == true)
   {
     if (cursors.left.isDown && cursors.up.isDown) 
@@ -755,7 +934,5 @@ function update() {
       }
     }
   }
-
-  //Deplacement
-
+  //------------------------------------------------------------------------//
 }
