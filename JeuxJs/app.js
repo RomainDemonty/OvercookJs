@@ -14,7 +14,7 @@ var config = {
     arcade: 
     {
       gravity: { y: 0 },
-      debug: true,
+      debug: false,
     },
   }
 };
@@ -120,7 +120,7 @@ function preload() {
   });
 
   
-  this.load.spritesheet("PoeleCuiss", "./Image/ImagePoeleAssiettes1.png", 
+  this.load.spritesheet("PoeleCuiss", "./Image/ImagePoeleAssiettes2.png", 
   {
     frameWidth: 80, //Taille de l'image 
     frameHeight: 80,
@@ -237,67 +237,67 @@ function create() {
   /*----------------------Frame de la poele de cuisson---------------------------------*/
   /*-----------------------------------------------------------------------------------*/
   /*-----------------------------------------------------------------------------------*/
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoeleVideCuissA",
     frames: [{ key: "PoeleCuiss", frame: 0 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoeleOeufCruA",
     frames: [{ key: "PoeleCuiss", frame: 1 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoeleOeufCuitA",
     frames: [{ key: "PoeleCuiss", frame: 2 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoeleOeufCraméA",
     frames: [{ key: "PoeleCuiss", frame: 3 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoeleSteackCruA",
     frames: [{ key: "PoeleCuiss", frame: 4 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoeleSteackCuitA",
     frames: [{ key: "PoeleCuiss", frame: 5 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoeleSteackCrameA",
     frames: [{ key: "PoeleCuiss", frame: 6 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoelePouletCruA",
     frames: [{ key: "PoeleCuiss", frame: 7 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoelePouletCuitA",
     frames: [{ key: "PoeleCuiss", frame: 8 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoelePouletCrameA",
     frames: [{ key: "PoeleCuiss", frame: 9 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  Cuiss1.anims.create({
     key: "PoeleSalA",
     frames: [{ key: "PoeleCuiss", frame: 10 }],
     frameRate: 1,
@@ -308,229 +308,229 @@ function create() {
   /*-----------------------------------------------------------------------------------*/
   
 
-  this.anims.create({
+  player.anims.create({
     key: "Vide",
     frames: [{ key: "mec", frame: 0 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "Poulet",
     frames: [{ key: "mec", frame: 1 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "Oeuf",
     frames: [{ key: "mec", frame: 2 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "Salade",
     frames: [{ key: "mec", frame: 3 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "SaladeCoupe",
     frames: [{ key: "mec", frame: 4 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "Steack",
     frames: [{ key: "mec", frame: 5 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "Pain",
     frames: [{ key: "mec", frame: 6 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoeleVide",
     frames: [{ key: "mec", frame: 7 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoelePouletCru",
     frames: [{ key: "mec", frame: 8 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoelePouletCuit",
     frames: [{ key: "mec", frame: 9 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoelePouletCrame",
     frames: [{ key: "mec", frame: 10 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoeleOeufcru",
     frames: [{ key: "mec", frame: 11 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoeleOeufcuit",
     frames: [{ key: "mec", frame: 12 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoeleOeufCrame",
     frames: [{ key: "mec", frame: 13 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoeleSteackCru",
     frames: [{ key: "mec", frame: 14 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoeleSteackCuit",
     frames: [{ key: "mec", frame: 15 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoeleSteackCrame",
     frames: [{ key: "mec", frame: 16 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "PoeleSale",
     frames: [{ key: "mec", frame: 17 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "MecCoca",
     frames: [{ key: "mec", frame: 18 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "MecFanta",
     frames: [{ key: "mec", frame: 19 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "MecEau",
     frames: [{ key: "mec", frame: 20 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssieteVide",
     frames: [{ key: "mec", frame: 21 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssieteOeufCru",
     frames: [{ key: "mec", frame: 22 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssieteOeufCuit",
     frames: [{ key: "mec", frame: 23 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssieteOeufCrame",
     frames: [{ key: "mec", frame: 24 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePain",
     frames: [{ key: "mec", frame: 25 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePainSteakCru",
     frames: [{ key: "mec", frame: 26 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePainSteakCruSalade",
     frames: [{ key: "mec", frame: 27 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePainSteakCuit",
     frames: [{ key: "mec", frame: 28 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePainSteakCuitSalade",
     frames: [{ key: "mec", frame: 29 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePainSteakCrame",
     frames: [{ key: "mec", frame: 30 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePainSteakCrameSalade",
     frames: [{ key: "mec", frame: 31 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePouletCru",
     frames: [{ key: "mec", frame: 32 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePouletCruSalade",
     frames: [{ key: "mec", frame: 33 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePouletCuit",
     frames: [{ key: "mec", frame: 34 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePouletCuitSalade",
     frames: [{ key: "mec", frame: 35 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePouletCrame",
     frames: [{ key: "mec", frame: 36 }],
     frameRate: 1,
   });
 
-  this.anims.create({
+  player.anims.create({
     key: "AssietePouletCrameSalade",
     frames: [{ key: "mec", frame: 37 }],
     frameRate: 1,
@@ -552,14 +552,14 @@ function create() {
   graphics.fillStyle(0xff0000);
   // Dessiner un rectangle rempli de couleur dans la zone atteignable
   
-  
+  /*
   graphics.fillRectShape(Assietes);
   graphics.fillRectShape(Evier);
   graphics.fillRectShape(Poubelle);
   graphics.fillRectShape(Frigo);
   graphics.fillRectShape(Poele1);
   graphics.fillRectShape(Plats1);
-  
+  */
 
   //graphics.fillRectShape(player);
   images = ['Steak','Poulet','Oeuf','Pain','Salade'];
@@ -754,199 +754,165 @@ function update() {
                             player.anims.play("PoeleVide", true);
                             Etat = 7;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 1:
                             player.anims.play("PoeleOeufcru", true);
                             Etat =11;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 2:
                             player.anims.play("PoeleOeufcuit", true);
                             Etat = 12;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 3:
                             player.anims.play("PoeleOeufCrame", true);
                             Etat = 13;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 4:
                             player.anims.play("PoeleSteackCru", true);
                             Etat = 14;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 5:
                             player.anims.play("PoeleSteackCuit", true);
                             Etat = 15;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 6:
                             player.anims.play("PoeleSteackCrame", true);
                             Etat = 16;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 7:
                             player.anims.play("PoelePouletCru", true);
                             Etat = 8;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 8:
                             player.anims.play("PoelePouletCuit", true);
                             Etat = 9;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 9:
                             player.anims.play("PoelePouletCrame", true);
                             Etat = 10;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                           case 10:
                             player.anims.play("PoeleSale", true);
                             Etat = 17;
                             Cuiss1.destroy();
-                            curDown = false;
-                            setTimeout(cursor, 500);
                           break;
                         }
                       break;
                       case 1:
                         player.anims.play("Vide", true);
                         Etat = 0;
+                        Cuiss1 = this.physics.add.sprite("PoeleCuiss", true);
                         Cuiss1.anims.play("PoelePouletCruA", true);
-                        curDown = false;
-                        setTimeout(cursor, 500);
                         C1 = 7;
                       break;
                       case 2:
                         player.anims.play("Vide", true);
                         Etat = 0;
+                        Cuiss1 = this.physics.add.sprite("PoeleCuiss", true);
                         Cuiss1.anims.play("PoeleOeufCruA", true);
-                        curDown = false;
-                        setTimeout(cursor, 500);
                         C1 = 1;
                       break;
                       case 5:
                         player.anims.play("Vide", true);
                         Etat = 0;
+                        Cuiss1 = this.physics.add.sprite("PoeleCuiss", true);
                         Cuiss1.anims.play("PoeleSteackCruA", true);
-                        curDown = false;
-                        setTimeout(cursor, 500);
                         C1 = 4;
                       break;
                       //Vide
                       case 7:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleVideCuissA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoeleVideCuissA", true);
                         C1 = 0;
                       break;
                       //Poulet
                       case 8:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoelePouletCruA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoelePouletCruA", true);
                         C1 = 7;
                       break;
                       case 9:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoelePouletCuitA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoelePouletCuitA", true);
                         C1 = 8;
                       break;
                       case 10:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoelePouletCrameA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoelePouletCrameA", true);
                         C1 = 9;
                       break;
                       //Oeuf
                       case 11:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleOeufCruA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoeleOeufCruA", true);
                         C1 = 1;
                       break;
                       case 12:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleOeufCuitA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoeleOeufCuitA", true);
                         C1 = 2;
                       break;
                       case 13:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleOeufCraméA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoeleOeufCraméA", true);
                         C1 = 3;
                       break;
                       //Steak
                       case 14:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleSteackCruA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoeleSteackCruA", true);
                         C1 = 4;
                       break;
                       case 15:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleSteackCuitA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoeleSteackCuitA", true);
                         C1 = 5;
                       break;
                       case 16:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleSteackCrameA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoeleSteackCrameA", true);
                         C1 = 6;
                       break;
                       //Sale
                       case 17:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleSalA");
-                        curDown = false;
-                        setTimeout(cursor, 500);
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
+                        Cuiss1.anims.play("PoeleSalA", true);
                         C1 = 10;
                       break;
                     }
+                    curDown = false;
+                    setTimeout(cursor, 500);
                   }
                 } 
               }
