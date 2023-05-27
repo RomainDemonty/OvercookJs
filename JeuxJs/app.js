@@ -14,7 +14,7 @@ var config = {
     arcade: 
     {
       gravity: { y: 0 },
-      debug: false,
+      debug: true,
     },
   }
 };
@@ -25,6 +25,10 @@ var Cuiss1;//Poele de cuisson 1
 
 //L'état de Cuiss1
 C1 = 0;
+
+//Si la cuisson est en cours
+brule = false;
+avancement = 0; //Cuisson de l'élément de départ
 
 var cursors;
 var game = new Phaser.Game(config);
@@ -120,7 +124,7 @@ function preload() {
   });
 
   
-  this.load.spritesheet("PoeleCuiss", "./Image/ImagePoeleAssiettes2.png", 
+  this.load.spritesheet("PoeleCuiss", "./Image/ImagePoeleAssiettes1.png", 
   {
     frameWidth: 80, //Taille de l'image 
     frameHeight: 80,
@@ -584,6 +588,13 @@ function onTimerTick() {
       this.scene.pause();
   }
   console.log(timer);
+
+  if (brule) {
+    setInterval(function() {
+      avancement++;
+      console.log("Avancement incrémentée :", avancement);
+    }, 3000);
+  }
 }
 /*-------------------------------------------------------------------------------------*/
 
@@ -594,7 +605,42 @@ function Deplacement() {
   Poele.destroy();
   player.anims.play("PoeleVide", true);
   Etat = 7;
+  C1 = 0;
 }
+/*-------------------------------------------------------------------------------------*/
+
+/*---------------------------------Upgrade---------------------------------------------*/
+/*function up() {
+  if(brule == true)
+  {
+    if(avancement == 3)
+    {
+      switch(C1)
+      {
+        case 7://Poulet
+          Cuiss1.destroy();
+          Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",8);
+          C1 = 8;
+        break;
+      }
+    }
+    else
+    {
+      if(avancement == 7)
+      {
+        switch(C1)
+        {
+          case 8:
+            Cuiss1.destroy();
+            Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",9);
+            C1 = 9;
+          break;
+        }
+      }
+    }
+  }
+}
+*/
 /*-------------------------------------------------------------------------------------*/
 
 /*Permet de pas avoir 20 événements quand on reste trop longtepms sur la touche appuyer*/
@@ -605,6 +651,38 @@ function cursor() {
 /*-------------------------------------------------------------------------------------*/
 
 function update() {
+
+  //up();
+
+  if(brule == true)
+  {
+    if(avancement == 3)
+    {
+      switch(C1)
+      {
+        case 7://Poulet
+          Cuiss1.destroy();
+          Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",8);
+          C1 = 8;
+        break;
+      }
+    }
+    else
+    {
+      if(avancement == 9)
+      {
+        switch(C1)
+        {
+          case 8:
+            Cuiss1.destroy();
+            Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",9);
+            C1 = 9;
+            brule = false;
+          break;
+        }
+      }
+    }
+  }
 
   if(sliderOn == true)
   {
@@ -759,158 +837,206 @@ function update() {
                             player.anims.play("PoeleOeufcru", true);
                             Etat =11;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                           case 2:
                             player.anims.play("PoeleOeufcuit", true);
                             Etat = 12;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                           case 3:
                             player.anims.play("PoeleOeufCrame", true);
                             Etat = 13;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                           case 4:
                             player.anims.play("PoeleSteackCru", true);
                             Etat = 14;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                           case 5:
                             player.anims.play("PoeleSteackCuit", true);
                             Etat = 15;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                           case 6:
                             player.anims.play("PoeleSteackCrame", true);
                             Etat = 16;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                           case 7:
                             player.anims.play("PoelePouletCru", true);
                             Etat = 8;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                           case 8:
                             player.anims.play("PoelePouletCuit", true);
                             Etat = 9;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                           case 9:
                             player.anims.play("PoelePouletCrame", true);
                             Etat = 10;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                           case 10:
                             player.anims.play("PoeleSale", true);
                             Etat = 17;
                             Cuiss1.destroy();
+                            brule = false;
                           break;
                         }
                       break;
                       case 1:
-                        player.anims.play("Vide", true);
-                        Etat = 0;
-                        Cuiss1 = this.physics.add.sprite("PoeleCuiss", true);
-                        Cuiss1.anims.play("PoelePouletCruA", true);
-                        C1 = 7;
+                        if(C1 == 0)
+                        {
+                          player.anims.play("Vide", true);
+                          Etat = 0;
+                          Cuiss1.destroy();
+                          Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",7);
+                          //Cuiss1.anims.play("PoelePouletCruA", true);
+                          C1 = 7;
+                          brule = true;
+                          avancement = 0;
+                        }
                       break;
                       case 2:
-                        player.anims.play("Vide", true);
-                        Etat = 0;
-                        Cuiss1 = this.physics.add.sprite("PoeleCuiss", true);
-                        Cuiss1.anims.play("PoeleOeufCruA", true);
-                        C1 = 1;
+                        if(C1 == 0)
+                        {
+                          player.anims.play("Vide", true);
+                          Etat = 0;
+                          Cuiss1.destroy();
+                          Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",1);
+                          //Cuiss1.anims.play("PoeleOeufCruA", true);
+                          C1 = 1;
+                          brule = true;
+                          avancement = 0;
+                        }
                       break;
                       case 5:
-                        player.anims.play("Vide", true);
-                        Etat = 0;
-                        Cuiss1 = this.physics.add.sprite("PoeleCuiss", true);
-                        Cuiss1.anims.play("PoeleSteackCruA", true);
-                        C1 = 4;
+                        if(C1 == 0)
+                        {
+                          player.anims.play("Vide", true);
+                          Etat = 0;
+                          Cuiss1.destroy();
+                          Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",4);
+                          //Cuiss1.anims.play("PoeleSteackCruA", true);
+                          C1 = 4;
+                          brule = true;
+                          avancement = 0;
+                        }
                       break;
                       //Vide
                       case 7:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoeleVideCuissA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",0);
+                        //Cuiss1.anims.play("PoeleVideCuissA", true);
                         C1 = 0;
                       break;
                       //Poulet
                       case 8:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoelePouletCruA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",7);
+                        //Cuiss1.anims.play("PoelePouletCruA", true);
                         C1 = 7;
+                        brule = true;
                       break;
                       case 9:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoelePouletCuitA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",8);
+                        //Cuiss1.anims.play("PoelePouletCuitA", true);
                         C1 = 8;
+                        brule = true;
                       break;
                       case 10:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoelePouletCrameA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",9);
+                        //Cuiss1.anims.play("PoelePouletCrameA", true);
                         C1 = 9;
+                        brule = true;
                       break;
                       //Oeuf
                       case 11:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoeleOeufCruA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",1);
+                        //Cuiss1.anims.play("PoeleOeufCruA", true);
                         C1 = 1;
+                        brule = true;
                       break;
                       case 12:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoeleOeufCuitA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",2);
+                        //Cuiss1.anims.play("PoeleOeufCuitA", true);
                         C1 = 2;
+                        brule = true;
                       break;
                       case 13:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoeleOeufCraméA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",3);
+                        //Cuiss1.anims.play("PoeleOeufCraméA", true);
                         C1 = 3;
                       break;
                       //Steak
                       case 14:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoeleSteackCruA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",4);
+                        //Cuiss1.anims.play("PoeleSteackCruA", true);
                         C1 = 4;
+                        brule = true;
                       break;
                       case 15:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoeleSteackCuitA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",5);
+                        //Cuiss1.anims.play("PoeleSteackCuitA", true);
                         C1 = 5;
+                        brule = true;
                       break;
                       case 16:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoeleSteackCrameA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",6);
+                        //Cuiss1.anims.play("PoeleSteackCrameA", true);
                         C1 = 6;
                       break;
                       //Sale
                       case 17:
                         player.anims.play("Vide", true);
                         Etat = 0;
-                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss");
-                        Cuiss1.anims.play("PoeleSalA", true);
+                        Cuiss1.destroy();
+                        Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",10);
+                        //Cuiss1.anims.play("PoeleSalA", true);
                         C1 = 10;
                       break;
                     }
+                    console.log("C1:"+C1);
+                    console.log("Etat:"+Etat);
                     curDown = false;
                     setTimeout(cursor, 500);
                   }
