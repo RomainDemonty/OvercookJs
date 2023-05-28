@@ -46,9 +46,6 @@ var FrigoAliment = 0;
 //Savoir si le joueur peut se déplacer
 Dep = true;
 
-//TEst
-var progress = 0;
-
 //Timer
 var timerText;
 var timer = 300;
@@ -584,17 +581,6 @@ function create() {
   image = this.add.image(330, 50, images[FrigoAliment]);
 }
 
-/*
-function updateProgress() {
-  progress += 0.25;
-
-  graphics.clear();
-  graphics.fillStyle(0x00ff00, 1);
-  graphics.slice(400, 300, 80, Phaser.Math.DegToRad(90), Phaser.Math.DegToRad(progress * 360), false);
-  graphics.fillPath();
-}
-*/
-
 /*-----------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------*/ 
 /*-----------------------------------------------------------------------------------*/ 
@@ -613,9 +599,6 @@ function onTimerTick() {
       this.scene.pause();
   }
   console.log(timer);
-
-  //test
-  //updateProgress();
 
   if (brule == true) {
       avancement++;
@@ -678,26 +661,36 @@ function cursor() {
 
 function update() {
 
+  //caré de cuisson
   if(avancement == 0)
   {
     square.setFillStyle(0xFFFFFF);
   }
 
+  //Changement d'état de la poele pour la cuisson
   if(brule == true)
   {
-
-
     if(avancement == 6)
     {
       square.setFillStyle(0x00FF00);
       
       switch(C1)
       {
+        case 1://oeuf
+          Cuiss1.destroy();
+          Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",2);
+          C1 = 2;
+        break;
+        case 4://oeuf
+          Cuiss1.destroy();
+          Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",5);
+          C1 = 5;
+        break;
         case 7://Poulet
           Cuiss1.destroy();
           Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",8);
           C1 = 8;
-        break;
+      break;
       }
     }
     else
@@ -707,6 +700,18 @@ function update() {
         square.setFillStyle(0xFF0000);
         switch(C1)
         {
+          case 2:
+            Cuiss1.destroy();
+            Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",3);
+            C1 = 3;
+            brule = false;
+          break;
+          case 5:
+            Cuiss1.destroy();
+            Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",6);
+            C1 = 6;
+            brule = false;
+          break;
           case 8:
             Cuiss1.destroy();
             Cuiss1 = this.physics.add.sprite(235, 575, "PoeleCuiss",9);
@@ -760,7 +765,7 @@ function update() {
       {
           if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Poubelle)) 
           {
-            if(cursors.space.isDown && Etat != 0)
+            if(cursors.space.isDown && Etat != 0 && Etat != 7)
             {
               //console.log(Etat)
               if(Etat > 7 && Etat < 18)
@@ -850,7 +855,11 @@ function update() {
             {
               if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Plats1)) 
               {
-                //player.anims.play("AssietePouletCuit", true);
+                switch(Etat){
+                  case 1:
+                    console.log("Test");
+                  break;
+                }
               } 
               else 
               {
