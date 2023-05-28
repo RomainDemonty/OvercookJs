@@ -14,7 +14,7 @@ var config = {
     arcade: 
     {
       gravity: { y: 0 },
-      debug: true,
+      debug: false,
     },
   }
 };
@@ -23,7 +23,7 @@ var player;
 var Poele;//Afficher les sprites de la poele
 var Cuiss1;//Poele de cuisson 1
 
-//L'état de Cuiss1
+//L'état de la poele
 C1 = 0;
 
 //Si la cuisson est en cours
@@ -46,6 +46,9 @@ var FrigoAliment = 0;
 //Savoir si le joueur peut se déplacer
 Dep = true;
 
+//TEst
+var progress = 0;
+
 //Timer
 var timerText;
 var timer = 300;
@@ -64,6 +67,8 @@ var image;
 var images;
 //Si changement
 var sliderOn = true;
+
+var square;
 
 //----------Les zones où les interactions sont possible-------------------------------//
 const Assietes = new Phaser.Geom.Rectangle(90, 550, 15, 15);
@@ -142,6 +147,15 @@ function preload() {
 /*-----------------------------------------------------------------------------------*/ 
 
 function create() {
+  //Test pour afficher l'état de cuisson
+  //var graphics = this.add.graphics();
+  //graphics.fillStyle(0xFFFFFF, 1); // Couleur rouge
+  //graphics.fillRect(280, 560, 30, 30); // Position et taille du carré
+  //graphics.setDepth(1);
+  //var graphics = this.add.graphics();
+  square = this.add.rectangle(290, 580, 30, 30,0xFFFFFF);
+  square.setDepth(1);
+
   // Création du texte du timer
   let Min = Math.floor(timer/60);
   timerText = this.add.text(30, 30, 'Temps restant : ' + Min  + 'min' + timer%60 +'sec', { font: '15px bold arial', fill: '#000000' });
@@ -551,9 +565,9 @@ function create() {
   Etat = 0;
 
   //Créer un objet Graphics
-  const graphics = this.add.graphics();
+  //const graphics = this.add.graphics();
    //Définir la couleur de remplissage à rouge
-  graphics.fillStyle(0xff0000);
+  //graphics.fillStyle(0xff0000);
   // Dessiner un rectangle rempli de couleur dans la zone atteignable
   
   /*
@@ -569,6 +583,17 @@ function create() {
   images = ['Steak','Poulet','Oeuf','Pain','Salade'];
   image = this.add.image(330, 50, images[FrigoAliment]);
 }
+
+/*
+function updateProgress() {
+  progress += 0.25;
+
+  graphics.clear();
+  graphics.fillStyle(0x00ff00, 1);
+  graphics.slice(400, 300, 80, Phaser.Math.DegToRad(90), Phaser.Math.DegToRad(progress * 360), false);
+  graphics.fillPath();
+}
+*/
 
 /*-----------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------*/ 
@@ -589,11 +614,12 @@ function onTimerTick() {
   }
   console.log(timer);
 
-  if (brule) {
-    setInterval(function() {
+  //test
+  //updateProgress();
+
+  if (brule == true) {
       avancement++;
       console.log("Avancement incrémentée :", avancement);
-    }, 3000);
   }
 }
 /*-------------------------------------------------------------------------------------*/
@@ -652,12 +678,19 @@ function cursor() {
 
 function update() {
 
-  //up();
+  if(avancement == 0)
+  {
+    square.setFillStyle(0xFFFFFF);
+  }
 
   if(brule == true)
   {
-    if(avancement == 3)
+
+
+    if(avancement == 6)
     {
+      square.setFillStyle(0x00FF00);
+      
       switch(C1)
       {
         case 7://Poulet
@@ -669,8 +702,9 @@ function update() {
     }
     else
     {
-      if(avancement == 9)
+      if(avancement == 12)
       {
+        square.setFillStyle(0xFF0000);
         switch(C1)
         {
           case 8:
@@ -709,6 +743,7 @@ function update() {
           player.setVelocityX(0);
           player.setVelocityY(0);
           setTimeout(Deplacement, 5000);
+          avancement = 0;
       }
     }
     else 
