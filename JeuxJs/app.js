@@ -29,6 +29,8 @@ var AE = 0;
 //Si assiette déposée
 var A1 = false;
 
+var choix =0;
+
 //L'état de la poele
 var C1 = 0;
 
@@ -133,12 +135,6 @@ function preload() {
 
   
   this.load.spritesheet("PoeleCuiss", "./Image/ImagePoeleAssiettes1.png", 
-  {
-    frameWidth: 80, //Taille de l'image 
-    frameHeight: 80,
-  });
-
-  this.load.spritesheet("Assiete", "./Image/ImagePoeleAssiettes1.png", 
   {
     frameWidth: 80, //Taille de l'image 
     frameHeight: 80,
@@ -485,6 +481,8 @@ function create() {
 
   //Permet d'avoir une intéraction avec le clavier
   cursors = this.input.keyboard.createCursorKeys();
+
+  keyEnter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
   //permet de creer l'environement de jeux
   bounds = new Phaser.Geom.Rectangle(65, 70, 420, 510);
   //player.body.setSize(36, 36);
@@ -492,6 +490,9 @@ function create() {
 
   //Définir l'état de base
   Etat = 0;
+
+  //Choix du plat voulu à 0
+  choix =0;
 
   //Créer un objet Graphics
   //const graphics = this.add.graphics();
@@ -511,6 +512,7 @@ function create() {
   //graphics.fillRectShape(player);
   images = ['Steak','Poulet','Oeuf','Pain','Salade'];
   image = this.add.image(330, 50, images[FrigoAliment]);
+
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -592,7 +594,32 @@ function cursor() {
 }
 /*-------------------------------------------------------------------------------------*/
 
+// Fonction de génération du nombre aléatoire
+function getRandomNumber(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function update() {
+
+  if(choix == 0)
+  {
+    choix = getRandomNumber(1, 3);
+    console.log("Choix: " +  choix);
+    if(choix == 1)
+    {
+      ChoixImage = this.physics.add.sprite(638, 360, "PoeleCuiss",29);
+    }
+    if(choix == 2)
+    {
+      ChoixImage = this.physics.add.sprite(638, 360, "PoeleCuiss",23);
+    }
+    if(choix == 3)
+    {
+      ChoixImage = this.physics.add.sprite(638, 360, "PoeleCuiss",35);
+    }
+  }
 
   //caré de cuisson
   if(avancement == 0)
@@ -702,6 +729,11 @@ function update() {
             if(cursors.space.isDown && Etat != 0 && Etat != 7)
             {
               //console.log(Etat)
+              if(Etat >=21 && Etat <=37)
+              {
+                AE = 0;
+              }
+              
               if(Etat > 7 && Etat < 18)
               {
                 player.anims.play("PoeleSale", true);
@@ -710,11 +742,6 @@ function update() {
               else{
                 player.anims.play("Vide", true);
                 Etat = 0;
-              }
-
-              if(Etat <=21 && Etat >=37)
-              {
-                AE = 0;
               }
             }
           } 
@@ -796,8 +823,10 @@ function update() {
               {
                   if(cursors.space.isDown)
                   {
+                    /*
                     console.log("Etat:" + Etat);
                     console.log("AE:" + AE);
+                    */
                     //Si l'assiette est sur la table
                     if(A1 == true)
                     {
@@ -866,7 +895,7 @@ function update() {
                       {
                         if(Etat == 1 || Etat == 2 || Etat == 3 || Etat == 5 || Etat == 6)//si avec aliment normal
                         {
-                          if(AE == 21)//Si l'assiette est vide
+                          if(AE == 21 && (Etat == 1 || Etat == 2 || Etat == 6))//Si l'assiette est vide
                           {
                             switch(Etat)
                             {
@@ -880,41 +909,41 @@ function update() {
                                 AE = 25;
                               break;
                             }
+                            assi.destroy();
+                            assi = this.physics.add.sprite(485, 355, "PoeleCuiss",AE);
+                            player.anims.play("Vide", true);
+                            Etat = 0;
                           }
 
-                          //Salade au burger
-                          if(AE == 26 && Etat == 3)//Pain steack cru
+                          if(Etat == 3 && (AE == 26 || AE == 28 || AE == 30 || AE == 32 || AE == 34 || AE == 36))
                           {
-                            AE = 27;
+                            switch(AE)
+                            {
+                              case 26: //Burger
+                               AE = 27;
+                              break;
+                              case 28: 
+                                AE = 29;
+                              break;
+                              case 30: 
+                                AE = 31;
+                              break;
+                              case 32: //Poulet
+                                AE = 33;
+                              break;
+                              case 34: 
+                                AE = 35;
+                              break;
+                              case 36: 
+                                AE = 37;
+                              break;
+                            }
+                            assi.destroy();
+                            assi = this.physics.add.sprite(485, 355, "PoeleCuiss",AE);
+                            player.anims.play("Vide", true);
+                            Etat = 0;
                           }
-                          if(AE == 28 && Etat == 3)//Pain steack cuit
-                          {
-                            AE = 29;
-                          }
-                          if(AE == 30 && Etat == 3)//Pain steack crame
-                          {
-                            AE = 31;
-                          }
-
-                          //Salade au poulet
-                          if(AE == 32 && Etat == 3)//Pain steack cru
-                          {
-                            AE = 33;
-                          }
-                          if(AE == 34 && Etat == 3)//Pain steack cuit
-                          {
-                            AE = 35;
-                          }
-                          if(AE == 36 && Etat == 3)//Pain steack crame
-                          {
-                            AE = 37;
-                          }
-
-                          assi.destroy();
-                          assi = this.physics.add.sprite(485, 355, "Assiete",AE);
-                          player.anims.play("Vide", true);
-                          Etat = 0;
-                        }
+                      }
 
                         if(Etat >=8 && Etat <=16)//Poele
                         {
@@ -959,7 +988,7 @@ function update() {
                             }
                           }
                           assi.destroy();
-                          assi = this.physics.add.sprite(485, 355, "Assiete",AE);
+                          assi = this.physics.add.sprite(485, 355, "PoeleCuiss",AE);
                           player.anims.play("PoeleSale", true);
                           Etat = 17;
                           C1 = 10;
@@ -970,17 +999,96 @@ function update() {
                     {
                       if(AE >= 21)
                       {
-                        assi = this.physics.add.sprite(485, 355, "Assiete",AE);
+                        assi = this.physics.add.sprite(485, 355, "PoeleCuiss",AE);
                         player.anims.play("Vide", true);
                         AE = Etat;
                         Etat = 0;
                         A1 = true;
                       }
-
                     }
                     curDown = false;
                     setTimeout(cursor, 500);
+                    
+                    console.log("After");
+                    console.log("Etat:" + Etat);
+                    console.log("AE:" + AE);
+                    
                   }
+                  else
+                  {
+                    if(keyEnter.isDown)
+                    {
+                      /*
+                      console.log("Enter");
+                      console.log("A1:" + A1);
+                      console.log("AE:" + AE);
+                      */
+
+                      let verif;//Sert à ne pas rendre le mauvais plat voulu
+                      if(AE >= 22 && AE <=24)
+                      {
+                        verif = 2;
+                      }
+                      else
+                      {
+                        if(AE >= 25 && AE <=31)
+                        {
+                          verif = 1;
+                        }
+                        else
+                        {
+                          verif = 3;
+                        }
+                      }
+
+
+                      if(AE >= 22 && AE <= 37 && A1 == true && verif == choix)
+                      {
+                        switch(AE)
+                        {
+                          case 24:
+                          case 25:
+                            Score += 1;
+                          break;
+                          case 22: 
+                          case 32: 
+                          case 36: 
+                            Score += 2;
+                          break;
+                          case 30:
+                          case 37: 
+                            Score += 3;
+                          break;
+                          case 26:
+                          case 33:
+                          case 34: 
+                            Score += 4;
+                          break;
+                          case 23:
+                          case 27:
+                          case 28:
+                          case 31: 
+                            Score += 6;
+                          break;
+                          case 35: 
+                            Score += 8;
+                          break;
+                          case 28: 
+                            Score += 8;
+                        break;
+                        }
+                        assi.destroy();
+                        AE = 0;
+                        A1 = false;
+                        choix = 0;
+                        ChoixImage.destroy();
+                        ScoreText.setText('Score : ' + Score);
+                      }
+                      curDown = false;
+                      setTimeout(cursor, 500);
+                    }                  
+ 
+                  }                   
               } 
               else 
               {
@@ -1060,7 +1168,7 @@ function update() {
                           break;
                         }
                       break;
-                      case 1:
+                      case 1://Mec avec une poele
                         if(C1 == 0)
                         {
                           player.anims.play("Vide", true);
