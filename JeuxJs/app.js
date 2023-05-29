@@ -22,9 +22,15 @@ var config = {
 var player;
 var Poele;//Afficher les sprites de la poele
 var Cuiss1;//Poele de cuisson 1
+var assi;
+
+//état de l'assiette
+var AE = 0;
+//Si assiette déposée
+var A1 = false;
 
 //L'état de la poele
-C1 = 0;
+var C1 = 0;
 
 //Si la cuisson est en cours
 brule = false;
@@ -132,6 +138,12 @@ function preload() {
     frameHeight: 80,
   });
 
+  this.load.spritesheet("Assiete", "./Image/ImagePoeleAssiettes1.png", 
+  {
+    frameWidth: 80, //Taille de l'image 
+    frameHeight: 80,
+  });
+
   this.load.spritesheet("mec", "./Image/SpriteBonhomme.png", 
   {
     frameWidth: 96, //Taille de l'image 
@@ -144,12 +156,7 @@ function preload() {
 /*-----------------------------------------------------------------------------------*/ 
 
 function create() {
-  //Test pour afficher l'état de cuisson
-  //var graphics = this.add.graphics();
-  //graphics.fillStyle(0xFFFFFF, 1); // Couleur rouge
-  //graphics.fillRect(280, 560, 30, 30); // Position et taille du carré
-  //graphics.setDepth(1);
-  //var graphics = this.add.graphics();
+  //état de cuisson
   square = this.add.rectangle(290, 580, 30, 30,0xFFFFFF);
   square.setDepth(1);
 
@@ -247,81 +254,6 @@ function create() {
   /*-----------------------------------------------------------------------------------*/
   /*-----------------------------------------------------------------------------------*/
   /*-----------------------------------------------------------------------------------*/
-
-
-  /*----------------------Frame de la poele de cuisson---------------------------------*/
-  /*-----------------------------------------------------------------------------------*/
-  /*-----------------------------------------------------------------------------------*/
-  Cuiss1.anims.create({
-    key: "PoeleVideCuissA",
-    frames: [{ key: "PoeleCuiss", frame: 0 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoeleOeufCruA",
-    frames: [{ key: "PoeleCuiss", frame: 1 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoeleOeufCuitA",
-    frames: [{ key: "PoeleCuiss", frame: 2 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoeleOeufCraméA",
-    frames: [{ key: "PoeleCuiss", frame: 3 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoeleSteackCruA",
-    frames: [{ key: "PoeleCuiss", frame: 4 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoeleSteackCuitA",
-    frames: [{ key: "PoeleCuiss", frame: 5 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoeleSteackCrameA",
-    frames: [{ key: "PoeleCuiss", frame: 6 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoelePouletCruA",
-    frames: [{ key: "PoeleCuiss", frame: 7 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoelePouletCuitA",
-    frames: [{ key: "PoeleCuiss", frame: 8 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoelePouletCrameA",
-    frames: [{ key: "PoeleCuiss", frame: 9 }],
-    frameRate: 1,
-  });
-
-  Cuiss1.anims.create({
-    key: "PoeleSalA",
-    frames: [{ key: "PoeleCuiss", frame: 10 }],
-    frameRate: 1,
-  });
-  /*-----------------------------------------------------------------------------------*/
-  /*-----------------------------------------------------------------------------------*/
-  /*-----------------------------------------------------------------------------------*/
-  /*-----------------------------------------------------------------------------------*/
-  
 
   player.anims.create({
     key: "Vide",
@@ -619,6 +551,7 @@ function Deplacement() {
 /*-------------------------------------------------------------------------------------*/
 
 /*---------------------------------Upgrade---------------------------------------------*/
+//Ne marche pas car add en fonction ne fonctionne pas//
 /*function up() {
   if(brule == true)
   {
@@ -755,10 +688,11 @@ function update() {
     {
       if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), Assietes)) 
       {
-        if(cursors.space.isDown && Etat == 0)
+        if(cursors.space.isDown && Etat == 0 && AE == 0)
         {
           player.anims.play("AssieteVide", true);
           Etat = 21;
+          AE =21;
         }
       } 
       else 
@@ -776,6 +710,11 @@ function update() {
               else{
                 player.anims.play("Vide", true);
                 Etat = 0;
+              }
+
+              if(Etat <=21 && Etat >=37)
+              {
+                AE = 0;
               }
             }
           } 
@@ -855,11 +794,193 @@ function update() {
             {
               if (Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(),Plats1)) 
               {
-                switch(Etat){
-                  case 1:
-                    console.log("Test");
-                  break;
-                }
+                  if(cursors.space.isDown)
+                  {
+                    console.log("Etat:" + Etat);
+                    console.log("AE:" + AE);
+                    //Si l'assiette est sur la table
+                    if(A1 == true)
+                    {
+                      //si le mec est vide prendre l'assiette
+                      if(Etat == 0)
+                      {
+                        switch(AE)
+                        {
+                          case 21:
+                            player.anims.play("AssieteVide", true);
+                          break;
+                          case 22:
+                            player.anims.play("AssieteOeufCru", true);
+                          break;
+                          case 23:
+                            player.anims.play("AssieteOeufCuit", true);
+                          break;
+                          case 24:
+                            player.anims.play("AssieteOeufCrame", true);
+                          break;
+                          case 25:
+                            player.anims.play("AssietePain", true);
+                          break;
+                          case 26:
+                            player.anims.play("AssietePainSteakCru", true);
+                          break;
+                          case 27:
+                            player.anims.play("AssietePainSteakCruSalade", true);
+                          break;
+                          case 28:
+                            player.anims.play("AssietePainSteakCuit", true);
+                          break;
+                          case 29:
+                            player.anims.play("AssietePainSteakCuitSalade", true);
+                          break;
+                          case 30:
+                            player.anims.play("AssietePainSteakCrame", true);
+                          break;
+                          case 31:
+                            player.anims.play("AssietePainSteakCrameSalade", true);
+                          break;
+                          case 32:
+                            player.anims.play("AssietePouletCru", true);
+                          break;
+                          case 33:
+                            player.anims.play("AssietePouletCruSalade", true);
+                          break;
+                          case 34:
+                            player.anims.play("AssietePouletCuit", true);
+                          break;
+                          case 35:
+                            player.anims.play("AssietePouletCuitSalade", true);
+                          break;
+                          case 36:
+                            player.anims.play("AssietePouletCrame", true);
+                          break;
+                          case 37:
+                            player.anims.play("AssietePouletCrameSalade", true);
+                          break;
+                        }
+                        assi.destroy();
+                        A1 = false;
+                        Etat = AE;
+                      }
+                      else//Sinon déposer l'aliment dans l'assiette
+                      {
+                        if(Etat == 1 || Etat == 2 || Etat == 3 || Etat == 5 || Etat == 6)//si avec aliment normal
+                        {
+                          if(AE == 21)//Si l'assiette est vide
+                          {
+                            switch(Etat)
+                            {
+                              case 1:
+                                AE = 32;
+                              break;
+                              case 2:
+                                AE = 22;
+                              break;
+                              case 6:
+                                AE = 25;
+                              break;
+                            }
+                          }
+
+                          //Salade au burger
+                          if(AE == 26 && Etat == 3)//Pain steack cru
+                          {
+                            AE = 27;
+                          }
+                          if(AE == 28 && Etat == 3)//Pain steack cuit
+                          {
+                            AE = 29;
+                          }
+                          if(AE == 30 && Etat == 3)//Pain steack crame
+                          {
+                            AE = 31;
+                          }
+
+                          //Salade au poulet
+                          if(AE == 32 && Etat == 3)//Pain steack cru
+                          {
+                            AE = 33;
+                          }
+                          if(AE == 34 && Etat == 3)//Pain steack cuit
+                          {
+                            AE = 35;
+                          }
+                          if(AE == 36 && Etat == 3)//Pain steack crame
+                          {
+                            AE = 37;
+                          }
+
+                          assi.destroy();
+                          assi = this.physics.add.sprite(485, 355, "Assiete",AE);
+                          player.anims.play("Vide", true);
+                          Etat = 0;
+                        }
+
+                        if(Etat >=8 && Etat <=16)//Poele
+                        {
+                          if(AE == 21)//Si l'asssiette est vide
+                          {
+                            switch(Etat)
+                            {
+                              case 8://poulet
+                                AE = 32;
+                              break;
+                              case 9:
+                                AE = 34;
+                              break;
+                              case 10:
+                                AE = 36;
+                              break;
+                              case 11://oeuf
+                                AE = 22;
+                              break;
+                              case 12:
+                                AE = 23;
+                              break;
+                              case 13:
+                                AE = 24;
+                              break;
+                            }
+                          }
+
+                          if(AE == 25)//Pain seul
+                          {
+                            switch(Etat)
+                            {
+                              case 14://poulet
+                                AE = 26;
+                              break;
+                              case 15:
+                                AE = 28;
+                              break;
+                              case 16:
+                                AE = 30;
+                              break;
+                            }
+                          }
+                          assi.destroy();
+                          assi = this.physics.add.sprite(485, 355, "Assiete",AE);
+                          player.anims.play("PoeleSale", true);
+                          Etat = 17;
+                          C1 = 10;
+                        }
+                      }
+                    }
+                    else//déposer l'assiette en fonction du type
+                    {
+                      if(AE >= 21)
+                      {
+                        assi = this.physics.add.sprite(485, 355, "Assiete",AE);
+                        player.anims.play("Vide", true);
+                        AE = Etat;
+                        Etat = 0;
+                        A1 = true;
+                      }
+
+                    }
+                    curDown = false;
+                    setTimeout(cursor, 500);
+                  }
               } 
               else 
               {
