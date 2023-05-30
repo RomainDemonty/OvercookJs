@@ -56,7 +56,7 @@ Dep = true;
 
 //Timer
 var timerText;
-var timer = 3;
+var timer = 300;
 
 //Score
 var ScoreText;
@@ -1028,6 +1028,11 @@ function update() {
                                 AE = 24;
                               break;
                             }
+                            assi.destroy();
+                            assi = this.physics.add.sprite(485, 355, "PoeleCuiss",AE);
+                            player.anims.play("PoeleSale", true);
+                            Etat = 17;
+                            C1 = 10;
                           }
 
                           if(AE == 25)//Pain seul
@@ -1044,12 +1049,12 @@ function update() {
                                 AE = 30;
                               break;
                             }
+                            assi.destroy();
+                            assi = this.physics.add.sprite(485, 355, "PoeleCuiss",AE);
+                            player.anims.play("PoeleSale", true);
+                            Etat = 17;
+                            C1 = 10;
                           }
-                          assi.destroy();
-                          assi = this.physics.add.sprite(485, 355, "PoeleCuiss",AE);
-                          player.anims.play("PoeleSale", true);
-                          Etat = 17;
-                          C1 = 10;
                         }
                       }
                     }
