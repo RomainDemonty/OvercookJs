@@ -56,7 +56,7 @@ Dep = true;
 
 //Timer
 var timerText;
-var timer = 300;
+var timer = 3;
 
 //Score
 var ScoreText;
@@ -236,7 +236,6 @@ function create() {
   player.setBounce(0); //Rebondissement
   player.setCollideWorldBounds(true);
 
-  //var spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
   //Les différentes annimations
   /*------------------------------Lavage-----------------------------------------------*/
   /*-----------------------------------------------------------------------------------*/
@@ -484,7 +483,7 @@ function create() {
 
   keyEnter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
   //permet de creer l'environement de jeux
-  bounds = new Phaser.Geom.Rectangle(65, 70, 420, 510);
+  bounds = new Phaser.Geom.Rectangle(98, 98, 362, 460);
   //player.body.setSize(36, 36);
   player.body.setBoundsRectangle(bounds);
 
@@ -523,13 +522,13 @@ function create() {
 function onTimerTick() {
   // Décrémentation du timer
   timer--;
-
   // Mise à jour du texte du timer
   let Min = Math.floor(timer/60);
   timerText.setText('Temps restant : ' + Min + 'min' + timer%60 +'sec');
 
   // Si le timer atteint 0, arrêt du jeu
   if (timer === 0) {
+      afficherFenetre(Score);
       this.scene.pause();
   }
   console.log(timer);
@@ -540,7 +539,66 @@ function onTimerTick() {
   }
 }
 /*-------------------------------------------------------------------------------------*/
+/*TEst*/
+/*
+window.addEventListener('load', function() {
+  start = false;
+  afficherFenetre(0); // Affiche la fenêtre modale avec un score initial de 0
+});
+*/
 
+
+function afficherFenetre(Score) {
+  var fenetre = document.createElement("div");
+  fenetre.style.position = "fixed";
+  fenetre.style.width = "500px";
+  fenetre.style.height = "500px";
+  fenetre.style.backgroundColor = "white";
+  fenetre.style.border = "3px solid lightgray";
+  fenetre.style.borderRadius = "20px";
+  fenetre.style.top = "50%";
+  fenetre.style.left = "50%";
+  fenetre.style.transform = "translate(-50%, -50%)";
+
+  var contenu = document.createElement("div");
+  contenu.innerHTML = "Score: " + Score;
+
+  var boutonJouer = document.createElement("button");
+  boutonJouer.innerHTML = "Jouer";
+  boutonJouer.style.position = "absolute";
+  boutonJouer.style.left = "50%";
+  boutonJouer.style.top = "90%";
+  boutonJouer.style.transform = "translate(-50%, -50%)";
+  boutonJouer.onclick = function() {
+    location.reload(); // Actualiser la page
+    // Code pour démarrer le jeu Phaser
+    // Cela peut inclure la création du jeu, la configuration des scènes, etc.
+  };
+
+  var image = document.createElement("img");
+  image.src = "./Image/Didact.png";
+  image.style.display = "block";
+  image.style.margin = "30px auto 0";
+  image.style.width = "80%";
+
+  var boutonQuitter = document.createElement("button");
+  boutonQuitter.innerHTML = "Quitter";
+  boutonQuitter.style.position = "absolute";
+  boutonQuitter.style.left = "50%";
+  boutonQuitter.style.top = "95%";
+  boutonQuitter.style.transform = "translate(-50%, -50%)";
+  boutonQuitter.onclick = function() {
+    window.location.href = "#"; // Redirection vers une autre page
+  };
+
+  fenetre.appendChild(contenu);
+  fenetre.appendChild(image);
+  fenetre.appendChild(boutonJouer);
+  fenetre.appendChild(boutonQuitter);
+
+  document.body.appendChild(fenetre);
+}
+/*Fin test*/
 /*-------------Permet de pas bouger quand on netoie la poele----------------------------*/
 function Deplacement() {
   console.log("Cinq secondes se sont écoulées !");
@@ -733,7 +791,7 @@ function update() {
               {
                 AE = 0;
               }
-              
+
               if(Etat > 7 && Etat < 18)
               {
                 player.anims.play("PoeleSale", true);
